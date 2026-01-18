@@ -25,18 +25,26 @@
             </div>
             
             <div class="buttons-container">
-                <button id="btn-extract-emails">Extract Emails</button>
-                <button id="btn-extract-usernames">Extract Usernames</button>
-                <button id="btn-one-per-line">One Per Line</button>
-                <button id="btn-clear">Clear</button>
-                <button id="btn-output-to-input">← Output to Input</button>
-                <button id="btn-copy">Copy Output</button>
+                <button id="btn-emails-newline">Emails (one per line)</button>
+                <button id="btn-emails-comma">Emails (comma separated)</button>
+                <button id="btn-emails-semicolon">Emails (semicolon separated)</button>
+                <button id="btn-usernames-newline">Usernames (one per line)</button>
+                <button id="btn-usernames-comma">Usernames (comma separated)</button>
+                <button id="btn-usernames-semicolon">Usernames (semicolon separated)</button>
+                <button id="btn-teams-url">Teams Chat URL</button>
+                <!-- <button id="btn-slack-url">Slack Chat URL</button>
+                <button id="btn-google-url">Google Chat URL</button> -->
+                <button id="btn-sort">Sort Alphabetically</button>
+                <button id="btn-copy">Copy output to Clipboard</button>
             </div>
             
             <div class="textbox-container">
                 <label for="output-text">Output</label>
                 <textarea id="output-text" placeholder="Formatted output will appear here..." readonly></textarea>
             </div>
+        </div>
+        <div class="footer-info">
+            Created by <a target="_blank" href="https://github.com/lyledodgegh">lyledodgegh</a> and maintained at <a target="_blank" href="https://github.com/lyledodgegh/email-formatter">github.com/lyledodgegh/email-formatter</a>, hosted using GitHub Pages.
         </div>
     </div>
     <script src="app.js"></script>
