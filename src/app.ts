@@ -12,11 +12,23 @@ class EmailFormatter {
     }
 
     private initializeEventListeners(): void {
-        document.getElementById('btn-extract-emails')?.addEventListener('click', () => this.extractEmails());
-        document.getElementById('btn-extract-usernames')?.addEventListener('click', () => this.extractUsernames());
-        document.getElementById('btn-one-per-line')?.addEventListener('click', () => this.onePerLine());
-        document.getElementById('btn-clear')?.addEventListener('click', () => this.clear());
-        document.getElementById('btn-output-to-input')?.addEventListener('click', () => this.outputToInput());
+        // Email extraction buttons
+        document.getElementById('btn-emails-newline')?.addEventListener('click', () => this.extractEmails('\n'));
+        document.getElementById('btn-emails-comma')?.addEventListener('click', () => this.extractEmails(', '));
+        document.getElementById('btn-emails-semicolon')?.addEventListener('click', () => this.extractEmails('; '));
+        
+        // Username extraction buttons
+        document.getElementById('btn-usernames-newline')?.addEventListener('click', () => this.extractUsernames('\n'));
+        document.getElementById('btn-usernames-comma')?.addEventListener('click', () => this.extractUsernames(', '));
+        document.getElementById('btn-usernames-semicolon')?.addEventListener('click', () => this.extractUsernames('; '));
+        
+        // Chat URL buttons
+        document.getElementById('btn-teams-url')?.addEventListener('click', () => this.generateTeamsUrl());
+        document.getElementById('btn-slack-url')?.addEventListener('click', () => this.generateSlackUrl());
+        document.getElementById('btn-google-url')?.addEventListener('click', () => this.generateGoogleUrl());
+        
+        // Utility buttons
+        document.getElementById('btn-sort')?.addEventListener('click', () => this.sortOutput());
         document.getElementById('btn-copy')?.addEventListener('click', () => this.copyOutput());
     }
 
@@ -35,7 +47,7 @@ class EmailFormatter {
      * - With friendly names: "John Doe" <john@example.com>
      * - Comma or semicolon separated
      */
-    private extractEmails(): void {
+    private extractEmails(separator: string): void {
         const input = this.getInput();
         
         // Regex to match email addresses (including those in angle brackets)
@@ -48,13 +60,13 @@ class EmailFormatter {
             emails.push(match[1]);
         }
         
-        this.setOutput(emails.join('\n'));
+        this.setOutput(emails.join(separator));
     }
 
     /**
      * Extract just the username part (before @) from email addresses.
      */
-    private extractUsernames(): void {
+    private extractUsernames(separator: string): void {
         const input = this.getInput();
         
         // Regex to match email addresses and capture the username part
@@ -67,42 +79,90 @@ class EmailFormatter {
             usernames.push(match[1]);
         }
         
-        this.setOutput(usernames.join('\n'));
+        this.setOutput(usernames.join(separator));
     }
 
     /**
-     * Convert comma/semicolon separated emails to one per line.
+     * Generate Microsoft Teams chat URL from emails.
+     * Format: https://teams.microsoft.com/v2/chat?email=<email1>,<email2>,<email3>
      */
-    private onePerLine(): void {
+    private generateTeamsUrl(): void {
+        const emails = this.getEmailsFromInput();
+        
+        if (emails.length === 0) {
+            this.setOutput('No emails found in input');
+            return;
+        }
+        
+        const url = `https://teams.microsoft.com/v2/chat?email=${emails.join(',')}`;
+        this.setOutput(url);
+    }
+
+    /**
+     * Generate Slack chat URL from emails.
+     * Format: https://slack.com/app_redirect?channel=@<email>
+     */
+    private generateSlackUrl(): void {
+        const emails = this.getEmailsFromInput();
+        
+        if (emails.length === 0) {
+            this.setOutput('No emails found in input');
+            return;
+        }
+        
+        // Slack uses a different URL pattern - for DMs it redirects to user
+        const urls = emails.map(email => `https://slack.com/app_redirect?channel=@${email}`);
+        this.setOutput(urls.join('\n'));
+    }
+
+    /**
+     * Generate Google Workspace chat URL from emails.
+     * Format: https://mail.google.com/chat/dm/<email>
+     */
+    private generateGoogleUrl(): void {
+        const emails = this.getEmailsFromInput();
+        
+        if (emails.length === 0) {
+            this.setOutput('No emails found in input');
+            return;
+        }
+        
+        // Google Chat URL for starting a conversation
+        const urls = emails.map(email => `https://mail.google.com/chat/dm/${email}`);
+        this.setOutput(urls.join('\n'));
+    }
+
+    /**
+     * Helper to extract emails from input.
+     */
+    private getEmailsFromInput(): string[] {
         const input = this.getInput();
+        const emailRegex = /<?([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})>?/g;
         
-        // Split by comma or semicolon, handling optional whitespace
-        const parts = input.split(/[,;]\s*/);
+        const emails: string[] = [];
+        let match: RegExpExecArray | null;
         
-        // Trim each part and filter out empty strings
-        const lines = parts
-            .map(part => part.trim())
-            .filter(part => part.length > 0);
+        while ((match = emailRegex.exec(input)) !== null) {
+            emails.push(match[1]);
+        }
+        
+        return emails;
+    }
+
+    /**
+     * Sort the output alphabetically.
+     */
+    private sortOutput(): void {
+        const output = this.outputTextarea.value;
+        
+        if (!output) {
+            return;
+        }
+        
+        const lines = output.split('\n').filter(line => line.trim().length > 0);
+        lines.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
         
         this.setOutput(lines.join('\n'));
-    }
-
-    /**
-     * Clear both input and output text areas.
-     */
-    private clear(): void {
-        this.inputTextarea.value = '';
-        this.outputTextarea.value = '';
-        this.inputTextarea.focus();
-    }
-
-    /**
-     * Copy the output text to the input text area.
-     */
-    private outputToInput(): void {
-        this.inputTextarea.value = this.outputTextarea.value;
-        this.outputTextarea.value = '';
-        this.inputTextarea.focus();
     }
 
     /**

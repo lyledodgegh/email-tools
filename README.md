@@ -1,11 +1,10 @@
-# email-formatter
+# Email Formatter
 
-This web app will help you take a block of text containing email addresses and extract just the email addresses, one per line.
+This site is just a helper client only TypeScript application to take a blob of text and do a bunch of things to it, such as:
 
-From there, you can copy them back to the left side, or perform actions such as:
+- putting just the emails on the right one on each line
+- putting just the first part of the email on the right one on each line (useful for getting user accounts to pop into other applications / account tools)
+- sorting of the right side alphabetically
+- creating chat URLs for Teams chat **ON EACH PERSON'S OWN TEAMS TENANT** (my favorite use case)
 
-- creating a URL for a Teams chat
-- collapsing them into a single line separated by semicolons or commas or more
-- copying the right block back to the left side for more actions
-- strip out the domains on the right
-- reorder alphabetically
+and copying the right side back to your clipboard.
