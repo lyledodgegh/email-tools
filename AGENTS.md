@@ -51,3 +51,6 @@ michael.johnson@sample.org
 emma.wilson@placeholder.com
 david.brown@fakemail.net
 
+Microsoft 365 Outlook Format:
+
+"Friendly Name" <someemail@somedomain.com>; "Friendly Name" <someemail@somedomain.com>
