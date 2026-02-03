@@ -84,7 +84,7 @@ class EmailTools {
 
     /**
      * Generate Microsoft Teams chat URL from emails.
-     * Format: https://teams.microsoft.com/v2/chat?email=<email1>,<email2>,<email3>
+     * Format: https://teams.microsoft.com/l/chat/0/0?users=<email1>,<email2>,<email3>
      */
     private generateTeamsUrl(): void {
         const emails = this.getEmailsFromInput();
@@ -94,7 +94,7 @@ class EmailTools {
             return;
         }
         
-        const url = `https://teams.microsoft.com/v2/chat?email=${emails.join(',')}`;
+        const url = `https://teams.microsoft.com/l/chat/0/0?users=${emails.join(',')}`;
         this.setOutput(url);
     }
 
