@@ -60,7 +60,8 @@ class EmailTools {
             emails.push(match[1]);
         }
         
-        this.setOutput(emails.join(separator));
+        const uniqueEmails = [...new Set(emails)];
+        this.setOutput(uniqueEmails.join(separator));
     }
 
     /**
@@ -79,7 +80,8 @@ class EmailTools {
             usernames.push(match[1]);
         }
         
-        this.setOutput(usernames.join(separator));
+        const uniqueUsernames = [...new Set(usernames)];
+        this.setOutput(uniqueUsernames.join(separator));
     }
 
     /**
@@ -146,7 +148,7 @@ class EmailTools {
             emails.push(match[1]);
         }
         
-        return emails;
+        return [...new Set(emails)];
     }
 
     /**
