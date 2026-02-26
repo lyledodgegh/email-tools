@@ -45,7 +45,8 @@ class EmailTools {
         while ((match = emailRegex.exec(input)) !== null) {
             emails.push(match[1]);
         }
-        this.setOutput(emails.join(separator));
+        const uniqueEmails = [...new Set(emails)];
+        this.setOutput(uniqueEmails.join(separator));
     }
     /**
      * Extract just the username part (before @) from email addresses.
@@ -59,7 +60,8 @@ class EmailTools {
         while ((match = emailRegex.exec(input)) !== null) {
             usernames.push(match[1]);
         }
-        this.setOutput(usernames.join(separator));
+        const uniqueUsernames = [...new Set(usernames)];
+        this.setOutput(uniqueUsernames.join(separator));
     }
     /**
      * Generate Microsoft Teams chat URL from emails.
@@ -113,7 +115,7 @@ class EmailTools {
         while ((match = emailRegex.exec(input)) !== null) {
             emails.push(match[1]);
         }
-        return emails;
+        return [...new Set(emails)];
     }
     /**
      * Sort the output alphabetically.
